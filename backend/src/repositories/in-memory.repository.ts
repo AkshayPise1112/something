@@ -1169,4 +1169,25 @@ export class InMemoryRepository implements IRepository {
   public async getSystemLogs(limit: number = 50): Promise<SystemLog[]> {
     return this.systemLogs.slice(0, limit);
   }
+
+  public getSeedSnapshot() {
+    return {
+      profiles: [...this.profiles],
+      businesses: [...this.businesses],
+      trends: [...this.trends],
+      trendMetrics: [...this.trendMetrics],
+      audiences: [...this.audiences],
+      geographicSignals: [...this.geographicSignals],
+      dataSources: [...this.dataSources],
+      rawSignals: [...this.rawSignals],
+      businessMatches: [...this.businessMatches],
+      opportunities: [...this.opportunities],
+      actionPlans: [...this.actionPlans],
+      expertReviews: [...this.expertReviews],
+      experiments: [...this.experiments],
+      experimentMetrics: [...this.experimentMetrics],
+      learningRecords: [...this.learningRecords],
+      alerts: [...this.alerts],
+    };
+  }
 }

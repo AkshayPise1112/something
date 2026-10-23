@@ -169,7 +169,7 @@ export interface AskTGoOutput {
 export interface IntelligenceResponseContract<T> {
   success: boolean;
   intelligenceVersion: string;
-  provider: 'mock' | 'local-open-model' | 'tgo' | 'external';
+  provider: 'mock' | 'local-open-model' | 'tgo' | 'external' | 'groq';
   model: string;
   modelVersion: string;
   generatedAt: string;

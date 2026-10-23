@@ -15,8 +15,7 @@ import {
   AskTGoOutput,
 } from './intelligence.interface';
 import { MockIntelligenceProvider } from './mock.provider';
-import { LocalOpenModelProvider } from './local-model.provider';
-import { TGoModelProvider } from './tgo.provider';
+import { GroqIntelligenceProvider } from './groq.provider';
 import { config } from '../config/env';
 
 export class IntelligenceService {
@@ -25,7 +24,7 @@ export class IntelligenceService {
   private fallbackProvider = new MockIntelligenceProvider();
 
   private constructor() {
-    this.provider = this.resolveProvider(config.intelligenceMode);
+    this.provider = this.resolveProvider(config.groqApiKey ? 'groq' : config.intelligenceMode);
   }
 
   public static getInstance(): IntelligenceService {
@@ -45,13 +44,11 @@ export class IntelligenceService {
 
   private resolveProvider(mode: string): IntelligenceProvider {
     switch (mode) {
-      case 'local':
-        return new LocalOpenModelProvider();
-      case 'tgo':
-        return new TGoModelProvider();
       case 'mock':
-      default:
         return new MockIntelligenceProvider();
+      case 'groq':
+      default:
+        return config.groqApiKey ? new GroqIntelligenceProvider() : new MockIntelligenceProvider();
     }
   }
 
@@ -60,9 +57,9 @@ export class IntelligenceService {
     return {
       success: true,
       intelligenceVersion: 'tgo-v1',
-      provider: isMock ? 'mock' : (this.provider.name as any),
-      model: isMock ? 'deterministic-rule-engine' : (config.aiModel || 'tgo-growth-8b'),
-      modelVersion: isMock ? 'rules-v1.2' : (config.aiVersion || 'tgo-v1'),
+      provider: isMock ? 'mock' : 'groq',
+      model: isMock ? 'deterministic-rule-engine' : (config.groqModel || 'llama-3.3-70b-versatile'),
+      modelVersion: isMock ? 'rules-v1.2' : 'groq-llama-3.3',
       generatedAt: new Date().toISOString(),
       data,
       meta: {
